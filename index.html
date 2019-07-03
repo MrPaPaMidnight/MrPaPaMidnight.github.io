@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <h1>Obliczanie pozycji satelity na podstawie danych RINEX
+        <br>
+    Opracował: st. kpr.  Kobiałka Przemysław</h1>
+   
+        <br>
+      
+    <br>
+    
+    
+    
+    
+    <body>
+     <link rel="stylesheet" href="./Style.css">
+        
+        
+        <div class="row">
+  <div class="column" style="background-color:#aaa;">
+      <div class="card">
+    rok bazowy <input type = "text" id ="rok">        
+    rok obliczany <input type = "text" id ="rok1">
+    liczba różnicy dni <input type = "text" id ="rok2">  
+    H UTC <input type = "text" id ="godzinaUTC">
+    MIN UTC <input type = "text" id ="minUTC">
+    SEK UTC  <input type = "text" id ="sekUTC"> 
+    Epoka Zegara(Toc) [h] <input type = "text" id ="epokazegara">        
+    Poprawka zegara(Toe) [sek] <input type = "text" id ="poprawkazegara">
+    GPS calendar <input type = "text" id ="GPScalendar">     
+    a0 [sek] <input type = "text" id ="A0">
+    a1 [sek/sek] <input type = "text" id ="A1">
+    a2 [sek/sek2]<input type = "text" id ="A2"> 
+    A1/2 (pierwiastek większej półosi) <input type = "text" id ="A1/2"> 
+    Stała GM  <input type = "text" id ="GM">
+    delta n [rad/sek] <input type = "text" id ="deltaN"> 
+    M0 [rad] <input type = "text" id ="M0"> 
+    e [ekscentrycznosc] <input type = "text" id ="eks">
+    omega e  <input type = "text" id ="stala">
+    Omega mala [rad] <input type = "text" id ="Omegamala">
+    Cuc [rad] <input type = "text" id ="Cuc">
+    Cus  <input type = "text" id ="Cus"> 
+    Crc [m] <input type = "text" id ="Crc">          
+    Crs [m] <input type = "text" id ="Crs">
+    Cic [rad]<input type = "text" id ="Cic"> 
+    Cis [rad] <input type = "text" id ="Cis">
+    Idot [rad/sek] <input type = "text" id ="Idot">
+    i0 [rad] <input type = "text" id ="i0">
+    Omega0 [rad] <input type = "text" id ="Omega0">
+    Omega dot [rad/sek] <input type = "text" id ="Omegadot">
+        
+    IODE [nr danych] <input type = "text" id ="IODE">
+    
+    
+    
+    
+    
+
+    Omega mala [rad] <input type = "text" id ="Omega mala">
+    
+    
+    L2 <input type = "text" id ="L2">
+    Tydzien GPS [mod 1024] <input type = "text" id ="Tydzien GPS">
+    Flaga L2 [P] <input type = "text" id ="Flaga L2">
+        
+        
+          
+          
+          
+        <button onclick ="calculate ()">Calculate</button>
+          <br>
+      
+    <br>
+          
+              <div class="popup" onclick="myFunction()">Obliczenia Pośrednie
+  <span class="popuptext" id="myPopup"> 
+    
+    Przeliczenie godziny =<p id = "przeliczenie3"></p>
+    Epoka Zegara(Toc)= <p id = "WLASCepok"></p>  
+    Epoka efemeryd (Toe) =<p id = "poprawkazegara2"></p> 
+    Prędkość dryfu =<p id = "preddryf"></p>
+    Obliczenia nr 1 = <p id = "potega"></p>
+    Obliczenia nr 2 = <p id = "potega2"></p>
+    Obliczenia nr 3 = <p id = "potega3"></p>
+    Obliczenia nr 4 = <p id = "potega4"></p>
+    Obliczenia nr 5 = <p id = "potega5"></p>
+    Obliczenia nr 6 = <p id = "potega6"></p>
+    Poprawka zegara  =<p id = "wsp"></p> 
+    Dryf zegara =<p id = "dryf"></p>
+    Delta SV =<p id = "deltaSV"></p>   
+    Czas pozycji SV =<p id = "czaspozycji"></p>
+    Czas od epoki referencyjnej =<p id = "czasodepoki"></p>
+    Pierwiastek dużej półosi  =<p id = "pierwiastek"></p>
+    Duża półoś orbity =<p id = "pierwiastek1"></p>
+    Przeliczona stała GM = <p id = "GM1"></p>   
+    Ruch średni satelty = <p id = "GM3"></p>
+    Poprawiony ruch średni = <p id = "deltaa"></p>
+    NTK = <p id = "ntk"></p>
+    Anomalia średnia na epokę tk = <p id = "ano"></p> 
+    E = <p id = "E"></p>   
+    Iteracja 1 = <p id = "iteracja1"></p>  
+    Iteracja 2 = <p id = "iteracja2"></p>  
+    Iteracja 3 = <p id = "iteracja3"></p>
+    Iteracja 4 = <p id = "iteracja4"></p>
+    Iteracja 5 = <p id = "iteracja5"></p>
+    SIN =    <p id = "sssxx"></p>
+    COS = <p id = "cccxx"></p>
+    Czlon = <p id = "czlon"></p>
+    Czlon0 = <p id = "cz0"></p>
+    Czlon1 = <p id = "czlon1"></p>
+    Czlon2 = <p id = "czlon2"></p>
+    Czlon3 = <p id = "czlon3"></p> 
+    Czlon4 = <p id = "czlon4"></p>  
+    Anomalia prawdziwa = <p id= "anopraw"></p>
+    Argument szerokosci = <p id="argszer"></p>
+    ARGszer2 = <p id="ARGsz"></p>
+    CosARG = <p id="cosarg"></p>
+    SinARG = <p id="sinarg"></p> 
+    Duk = <p id= "duk"></p>
+    Drk = <p id= "drk"></p>
+    Dik= <p id= "dik"></p>
+    Poprawka argumentu szerokości = <p id= "rk"></p>
+    Poprawka promienia wodzącego = <p id= "uk"></p> 
+    Poprawka inklinacji = <p id= "ik"></p>    
+    OBL3 = <p id= "obl3"></p>
+    OBL7 = <p id= "obl7"></p>
+    OBL8 = <p id= "obl8"></p> 
+    OBL9 = <p id= "obl9"></p> 
+    OBL10 = <p id= "obl10"></p>
+    OBL11 = <p id= "obl11"></p>
+    OBL12 = <p id= "obl12"></p>
+    OBL13 = <p id= "obl13"></p>
+    OBL14 = <p id= "obl14"></p>
+    OBL15 = <p id= "obl15"></p>
+    OBL16 = <p id= "obl16"></p>
+    OBL17 = <p id= "obl17"></p>
+    OBL18 = <p id= "obl18"></p>  
+    OBL19 = <p id= "obl19"></p>
+    OBL20 = <p id= "obl20"></p>  
+    Omega K = <p id = "OmegaK"></p>
+    Cos(Omega K) = <p id = "obl11"></p>
+    Sin(Omega K) = <p id = "obl12"></p></span>
+</div>
+          
+          
+          
+          
+        </div>
+</div>
+<div class="column2" >
+ Ilość lat  = <p  id = "wynik" style = "color: aqua"></p>
+ Ilość dni wyliczonych z lat przystęnych = <p id = "iloscdni"></p>
+ Suma dni = <p id = "sumadni"></p>
+ Ilość pełnych tygodni = <p id = "iloscpelnychtygodni"></p>
+ Przeliczone dni = <p id = "przeliczenie"></p>
+ Zaokrąglone dni = <p id = "zaokraglenie"></p>
+ Dni na sekudny  = <p id = "dninasek"></p>
+ Czas UTC na sekundy (Tsv)= <p id = "przeliczenie2"></p>    
+ Suma sekund =<p id = "calosc"></p>
+
+<br>
+    <br>
+
+    Współrzędne w płaszczyźnie orbity:
+<br>
+    <br>
+    XPk =  <p id= "XPk"></p>
+    YPk = <p id = "YPk"></p>
+
+    Współrzędne przetransformowane do układu kartezjańskiego 
+<br>
+   
+    <br> 
+    
+    Xk = <p id = "Xk"></p>
+    Yk = <p id = "Yk"></p>
+    Zk = <p id = "Zk"></p>
+  
+    
+    <div class="okno">
+    <iframe src="NWS2.html" width="1100" height="650" style="float:right" ></iframe>
+        </div>
+    
+ 
+ 
+    </div>
+      
+      
+  </div>
+
+        
+ 
+ 
+        <script>
+// When the user clicks on div, open the popup
+function myFunction() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+}
+</script>
+
+        
+        
+        
+        
+        
+     <script>
+    
+    function calculate()
+        {
+        var field1 = document.getElementById("rok").value;
+        var field2 = document.getElementById("rok1").value;
+         
+      
+        var wyniklat = parseFloat(field2) - parseFloat(field1);
+        
+       document.getElementById("wynik").innerHTML = wyniklat;
+            
+       var iloscdni = (parseFloat(wyniklat)/4) +1;         
+       document.getElementById("iloscdni").innerHTML = iloscdni;  
+            
+        var field3 = document.getElementById("rok2").value;
+            
+        
+       var sumadni = parseFloat(wyniklat)*365 + parseFloat(iloscdni) + parseFloat(field3);    
+        document.getElementById("sumadni").innerHTML = sumadni; 
+            
+        var ilosctygodni = sumadni/7;
+           
+            
+        var iloscpelnychtygodni = Math.floor(sumadni/7);
+        document.getElementById("iloscpelnychtygodni").innerHTML = iloscpelnychtygodni;
+        
+        var przeliczenie = (parseFloat(ilosctygodni) - parseFloat(iloscpelnychtygodni))*7;
+        document.getElementById("przeliczenie").innerHTML = przeliczenie;
+        
+        var zaokraglenie = Math.ceil(przeliczenie);
+        document.getElementById("zaokraglenie").innerHTML = zaokraglenie;
+        
+        var dninasek = parseFloat(zaokraglenie)*86400;
+        document.getElementById("dninasek").innerHTML = dninasek; 
+        
+       var field4 = document.getElementById("godzinaUTC").value;
+        var field5 = document.getElementById("minUTC").value;
+        var field6 = document.getElementById("sekUTC").value;    
+        
+        var przeliczenie2 =  parseFloat(field4)*3600 + parseFloat(field5)*60 +parseFloat(field6);
+        
+        document.getElementById("przeliczenie2").innerHTML = przeliczenie2;  
+            
+        var GPScalendar = document.getElementById("GPScalendar").value;    
+            
+    
+        var calosc = parseFloat(dninasek) + parseFloat(przeliczenie2);           
+        document.getElementById("calosc").innerHTML =  calosc;
+        
+            
+            
+        var field7 = document.getElementById("epokazegara").value;
+        var przeliczenie3 = parseFloat(field7)*3600;    
+        document.getElementById("przeliczenie3").innerHTML =  przeliczenie3;
+        
+        
+        var WLASCepok =  parseFloat(dninasek) + parseFloat(przeliczenie3);
+        document.getElementById("WLASCepok").innerHTML =  WLASCepok;    
+            
+            
+        var field8 = document.getElementById("A0").value;
+            
+             var wsp =  parseFloat(field8).toPrecision(12);
+            document.getElementById("wsp").innerHTML = wsp;
+            
+        var field9 = document.getElementById("A1").value; 
+            
+            var dryf = parseFloat(field9).toFixed(25); 
+        document.getElementById("dryf").innerHTML =  dryf;
+            
+        var field10 = document.getElementById("A2").value;
+        
+        var preddryf = parseFloat(field10).toFixed(2);
+        document.getElementById("preddryf").innerHTML =  preddryf;
+            
+            
+            
+             var field11 = document.getElementById("poprawkazegara").value;
+            
+            var poprawkazegara2 = parseFloat(field11).toPrecision(12);   
+          document.getElementById("poprawkazegara2").innerHTML =  poprawkazegara2;
+            
+            
+   
+            
+            
+            
+            
+            
+        var potega = parseFloat(calosc) - parseFloat(WLASCepok);
+            document.getElementById("potega").innerHTML = potega;
+            
+        var potega2 = parseFloat(calosc) - parseFloat(WLASCepok);
+            document.getElementById("potega2").innerHTML = potega2;
+            
+        var potega3 = parseFloat(dryf)* parseFloat(potega2) ;
+            document.getElementById("potega3").innerHTML = potega3;
+            
+            var potega4 = Math.pow(potega,2);
+            document.getElementById("potega4").innerHTML = potega4;
+            
+            var potega5 = parseFloat(wsp) + parseFloat(potega3);
+            document.getElementById("potega5").innerHTML = potega5;
+            
+            var potega6 = parseFloat(preddryf) * parseFloat(potega4);
+            document.getElementById("potega6").innerHTML = potega6;
+            
+            
+            
+            
+            
+            
+            
+            
+            var deltaSV = parseFloat(potega5) + parseFloat(potega6);
+        document.getElementById("deltaSV").innerHTML =  deltaSV;
+            
+            var czaspozycji = parseFloat(calosc) - parseFloat(deltaSV);
+            document.getElementById("czaspozycji").innerHTML =  czaspozycji;
+        
+        
+            
+            var czasodepoki = parseFloat(czaspozycji) - parseFloat(poprawkazegara2);
+            document.getElementById("czasodepoki").innerHTML = czasodepoki;
+            
+            
+            
+            
+            
+            
+            
+            
+             var field12 = document.getElementById("A1/2").value;
+            var pierwiastek = parseFloat(field12).toFixed(20); 
+            document.getElementById("pierwiastek").innerHTML = pierwiastek;
+            
+            //predkosc katowa 
+            var  pierwiastek1 = Math.pow(pierwiastek,2);
+            var pierw = parseFloat(pierwiastek1).toFixed(); 
+            document.getElementById("pierwiastek1").innerHTML = pierwiastek1;
+            
+            var field13 = document.getElementById("GM").value;
+            var GM1 = parseFloat(field13).toFixed(15);
+            document.getElementById("GM1").innerHTML = GM1;
+            
+            var pierwiastek3 = Math.pow(pierwiastek1,3);
+                                       
+            var GM2  = parseFloat(GM1)/parseFloat(pierwiastek3);
+            var GM3  = Math.sqrt(GM2);
+            document.getElementById("GM3").innerHTML = GM3;
+            
+            var field14 = document.getElementById("deltaN").value;
+            var del = parseFloat(field14).toFixed(15);
+            var deltaa = parseFloat(GM3) + parseFloat(del);
+            document.getElementById("deltaa").innerHTML = deltaa;
+            
+            var ntk = parseFloat(deltaa) * parseFloat(czasodepoki);
+            document.getElementById("ntk").innerHTML = ntk;
+            
+            var field15 = document.getElementById("M0").value;
+            var ano = parseFloat(field15) + parseFloat(ntk);
+            document.getElementById("ano").innerHTML = ano;
+            
+            var field16 = document.getElementById("eks").value;
+            var E = parseFloat(field16).toFixed(15);
+            document.getElementById("E").innerHTML = E;
+            
+            var sin = Math.sin(ano);
+            var pr = parseFloat(E) * parseFloat(sin);
+            var iteracja1 = parseFloat(ano) + parseFloat(pr);
+            
+            document.getElementById("iteracja1").innerHTML = iteracja1;
+            
+            var sin1= Math.sin(iteracja1);
+            var E1 = E * sin1; 
+            var iteracja2 = ano + E1;
+            document.getElementById("iteracja2").innerHTML = iteracja2;
+            
+            var sin2= Math.sin(iteracja2);
+            var E2 = E * sin2;
+             var iteracja3 = ano + E2;
+            document.getElementById("iteracja3").innerHTML = iteracja3;
+            
+            var sin3= Math.sin(iteracja3);
+            var E3 = E * sin3;
+            var iteracja4 = ano + E3;
+            document.getElementById("iteracja4").innerHTML = iteracja4;
+            
+            var sin4 = Math.sin(iteracja4);
+            var E4 = E * sin4;
+            var iteracja5 = ano + E4;
+            document.getElementById("iteracja5").innerHTML = iteracja5;
+            
+            
+            
+            
+            
+            
+            var czlon = Math.pow(E,2);
+            document.getElementById("czlon").innerHTML = czlon;
+            var cz0 = 1 - parseFloat(czlon);
+            document.getElementById("cz0").innerHTML = cz0;
+            var czlon1 = Math.sqrt(cz0);
+            document.getElementById("czlon1").innerHTML = czlon1;
+            var sssxx = Math.sin(iteracja5);
+            document.getElementById("sssxx").innerHTML = sssxx;
+            var cccxx = Math.cos(iteracja5);
+            document.getElementById("cccxx").innerHTML = cccxx;
+            
+            
+            
+            
+            var czlon2 = parseFloat(czlon1) * parseFloat(sssxx);
+            document.getElementById("czlon2").innerHTML = czlon2;
+            var czlon3  = parseFloat(cccxx) - parseFloat(E);
+            document.getElementById("czlon3").innerHTML = czlon3;
+            var czlon4 = parseFloat(czlon2)/parseFloat(czlon3);
+            document.getElementById("czlon4").innerHTML = czlon4;
+            var anopraw = Math.atan2(czlon2,czlon3);
+            document.getElementById("anopraw").innerHTML = anopraw;
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            var stala = document.getElementById("stala").value;
+            var stala1 = parseFloat(stala).toFixed(30);
+            
+           
+            var mala0 = document.getElementById("Omegamala").value;
+            var mala = parseFloat(mala0).toFixed(30);
+            
+            var argszer = parseFloat(anopraw) + parseFloat(mala);
+            document.getElementById("argszer").innerHTML = argszer;
+            
+            
+            var pi =  Math.PI;
+            
+            var C1 = document.getElementById("Cuc").value;
+            var kalk1 = parseFloat(C1).toFixed(15);
+            
+            
+            var C2 = document.getElementById("Cus").value;
+            var kalk2 = parseFloat(C2).toFixed(15);
+            
+            
+            var C3 = document.getElementById("Crc").value;
+            var kalk3 = parseFloat(C3).toFixed(15);
+           
+            
+            var C4 = document.getElementById("Crs").value;
+            var kalk4 = parseFloat(C4).toFixed(15);
+            
+            
+            var C5 = document.getElementById("Cic").value;
+            var kalk5 = parseFloat(C5).toFixed(15);
+            
+            
+            var C6 = document.getElementById("Cis").value;
+            var kalk6 = parseFloat(C6).toFixed(15);
+             
+            var ARGsz = 2 * parseFloat(argszer);
+            document.getElementById("ARGsz").innerHTML = ARGsz ;
+            var cosarg = Math.cos(ARGsz);
+            document.getElementById("cosarg").innerHTML = cosarg;
+            var sinarg = Math.sin(ARGsz);
+            document.getElementById("sinarg").innerHTML = sinarg;
+            
+            var P1 = parseFloat(C1)*parseFloat(cosarg);
+            var P2 = parseFloat(C2) * parseFloat(sinarg);
+            var duk = parseFloat(P1) + parseFloat(P2);
+            document.getElementById("duk").innerHTML = duk;
+            
+            
+            var P3 = (C3 * cosarg);
+            var P4 = (C4 * sinarg);
+            var drk = (P3 + P4);
+            document.getElementById("drk").innerHTML = drk;
+            
+            var P5 = (C5 * cosarg);
+            var P6 = (C6 * sinarg);
+            var dik = (P5 + P6);
+            document.getElementById("dik").innerHTML = dik;
+            
+            
+            var uk = argszer + duk;
+            document.getElementById("uk").innerHTML = uk;
+            
+            var co = Math.cos(iteracja5); 
+            var obl = parseFloat(E) * parseFloat(co);
+            var obl1 = 1 - parseFloat(obl);
+            var obl2 = (pierwiastek1 * obl1);
+            var rk = (obl2 + drk);
+            document.getElementById("rk").innerHTML = rk;
+            
+            var IDOT0 =  document.getElementById("Idot").value;
+            var IDOT = parseFloat(IDOT0).toFixed(35);
+            
+            var I00 = document.getElementById("i0").value;
+            var I0 = parseFloat(I00).toFixed(35);
+            
+            var obl3 = (czasodepoki * IDOT);
+            document.getElementById("obl3").innerHTML = obl3;
+            var obl4 =parseFloat(I0) + parseFloat(obl3);
+            var ik = parseFloat(obl4) + parseFloat(dik);
+            document.getElementById("ik").innerHTML = ik;
+            
+            var obl5 = Math.cos(uk);
+            var XPk =  (rk * obl5);
+            document.getElementById("XPk").innerHTML = XPk;
+            
+            var obl6 = Math.sin(uk);
+            var YPk = (rk * obl6);
+            document.getElementById("YPk").innerHTML = YPk;
+            
+            
+            
+            
+            
+            
+            var omega0 = document.getElementById("Omega0").value;
+            var omega01 = parseFloat(omega0).toFixed(35);
+            
+            var omegadot =  document.getElementById("Omegadot").value;
+            var omegadot1 = parseFloat(omegadot).toFixed(35);
+            
+            
+            var obl7 = parseFloat(omegadot1) - parseFloat(stala1);
+            document.getElementById("obl7").innerHTML = obl7;
+            
+            var obl8 = parseFloat(obl7) * parseFloat(czasodepoki);
+            document.getElementById("obl8").innerHTML = obl8;
+            
+            var obl9 = parseFloat(stala1) * parseFloat(poprawkazegara2);
+            document.getElementById("obl9").innerHTML = obl9;
+            
+            
+            
+           
+            
+            
+            
+            var obl10 = parseFloat(obl8) - parseFloat(obl9);
+            document.getElementById("obl10").innerHTML = obl10;
+            
+            var OmegaK = parseFloat(omega01) + parseFloat(obl10);
+            document.getElementById("OmegaK").innerHTML = OmegaK;
+            
+           
+            
+            
+            
+            
+            
+            var obl11 = Math.sin(OmegaK);
+            document.getElementById("obl11").innerHTML = obl11;
+            
+            var obl12 = Math.cos(OmegaK);
+            document.getElementById("obl12").innerHTML = obl12;
+            
+            var IK = parseFloat(ik);
+            var obl13 = Math.sin(IK);
+            document.getElementById("obl13").innerHTML = obl13;
+            var obl14 = Math.cos(IK);
+            document.getElementById("obl14").innerHTML = obl14;
+            
+            var obl15 =  parseFloat(XPk) * parseFloat(obl12);
+            document.getElementById("obl15").innerHTML = obl15;
+            
+            var obl16 = parseFloat(YPk)*parseFloat(obl11);
+            document.getElementById("obl16").innerHTML = obl16;
+            
+            var obl17 = parseFloat(obl16) *parseFloat(obl14);
+            document.getElementById("obl17").innerHTML = obl17;
+            
+            var Xk = parseFloat(obl15) - parseFloat(obl17);
+            
+            document.getElementById("Xk").innerHTML = Xk;
+            
+            
+            
+            
+            var obl18 = parseFloat(XPk) * parseFloat(obl11);
+            document.getElementById("obl18").innerHTML = obl18;
+            
+            var obl19 = parseFloat(YPk)*parseFloat(obl12);
+            document.getElementById("obl19").innerHTML = obl19;
+            
+            var obl20 = parseFloat(obl19)*parseFloat(obl14);
+            document.getElementById("obl20").innerHTML = obl20;
+            
+            var Yk =  parseFloat(obl18) + parseFloat(obl20);
+            
+            document.getElementById("Yk").innerHTML = Yk;
+            
+            
+            
+            
+
+            
+           
+        
+            var Zk = parseFloat(YPk) * parseFloat(obl13);
+            document.getElementById("Zk").innerHTML = Zk;
+            
+   
+            
+                     
+            
+            
+            
+        };
+    
+         
+   
+     
+    </script>
+    </body>
+    
+    </html>
