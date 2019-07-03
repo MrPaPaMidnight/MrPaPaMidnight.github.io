@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Pozycja wyznaczanego satelity</title>
+
+     
+
+           <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+      <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://js.arcgis.com/4.11/"></script>
+    <script src="https://developers.arcgis.com/javascript/latest/sample-code/satellites-3d/live/satellite.js"></script>
+       <script src="proba.html"></script>
+
+      
+      
+       
+      
+      
+      
+      
+      <script>
+      require([
+        "esri/Map",
+        "esri/views/SceneView",
+        "esri/layers/GraphicsLayer",
+        "esri/Graphic",
+        "dojo/text!https://developers.arcgis.com/javascript/latest/sample-code/satellites-3d/live/brightest.txt"
+      ], function(Map, SceneView, GraphicsLayer, Graphic, data) {
+        var map = new Map({
+          basemap: "satellite"
+        });
+            var view = new SceneView({
+          container: "viewDiv",
+          map: map,
+          center: [14749800.11, 8039150.34,-20919988.99],
+         zoom:2,
+          constraints: {
+            altitude: {
+              max: 12000000000 // meters
+                
+                
+                
+            }
+       
+          },
+  
+          popup: {
+            dockEnabled: true,
+            dockOptions: {
+              breakpoint: false
+            }
+          }
+        });
+        var val1 = 17749751.11;
+          var val2 = 8539154.34;
+              var val3 =-20919988.99; 
+        
+     
+          
+        var graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+       var point = {
+          type: "point", 
+          x: 14749751.11,
+          y: 8039154.34,
+          z: -20919988.99
+        };
+
+         
+          
+        markerSymbol = {
+          type: "simple-marker", 
+          color: [226, 119, 40],
+          outline: {
+            
+            color: [255, 255, 255],
+            width: 2
+          }
+        };
+
+        var pointGraphic = new Graphic({
+          geometry: point,
+          symbol: markerSymbol
+        });
+ 
+        graphicsLayer.add(pointGraphic);
+         
+      });
+    </script>
+
+  <body>
+      
+    <div id="viewDiv"></div>
+          
+  </body>
+</html>
